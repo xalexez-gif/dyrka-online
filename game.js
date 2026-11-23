@@ -402,6 +402,7 @@ class Room {
     const host = this.hostIdx();
     return {
       t: 'state',
+      game: 'dyrka',
       code: this.code,
       phase: this.phase,
       kon: this.kon,
@@ -443,4 +444,4 @@ class Room {
 }
 
 const REACTIONS_LIST = REACTIONS;
-module.exports = { EXCH_MS, REACTIONS: REACTIONS_LIST, Room, TURN_MS, BETWEEN_MS, rankOf, suitOf };
+module.exports = { EXCH_MS, REACTIONS: REACTIONS_LIST, Room, TURN_MS, BETWEEN_MS, rankOf, suitOf, shuffle, rnd, BOT_NAMES };

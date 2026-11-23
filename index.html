@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1a0f08">
-<meta name="description" content="Карточная игра для 3–4 друзей. Создай стол и пригласи своих.">
-<title>Дырка онлайн</title>
+<meta name="description" content="Дырка, Дурак и Козёл онлайн: создайте стол и пригласите друзей. Свободные места займут боты.">
+<title>Карточный паб — Дырка, Дурак, Козёл</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -267,6 +267,67 @@ table.st td{padding:10px 6px;text-align:center;border-top:1px solid rgba(255,255
 #banner{position:fixed;left:0;right:0;top:0;background:#7a2a22;text-align:center;font-weight:700;font-size:13px;padding:6px;z-index:90}
 
 /* ---------- адаптив ---------- */
+
+/* ---------- выбор игры ---------- */
+.gamepick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 8px}
+.gamepick button{border:1px solid var(--line);background:rgba(0,0,0,.3);border-radius:14px;padding:12px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);transition:.2s}
+.gamepick button:hover{border-color:rgba(230,189,94,.6)}
+.gamepick .gi{font-size:26px;line-height:1}
+.gamepick b{font-family:var(--display);font-weight:400;font-size:16px;color:var(--text);letter-spacing:.04em}
+.gamepick small{font-size:11px;font-weight:700;letter-spacing:.03em}
+.gamepick button.on{background:var(--gold-soft);border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold),0 6px 18px rgba(0,0,0,.35)}
+.gamepick button.on small{color:var(--gold)}
+#gameDesc{margin:0 0 16px;min-height:34px}
+/* ---------- Дурак ---------- */
+.dk{display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,36px);width:100%;min-height:0;position:relative}
+.dkdeck{--dw:calc(var(--cw)*.74);position:relative;flex:none;width:calc(var(--dw)*1.75);height:calc(var(--dw)*1.5);margin-left:calc(var(--dw)*-.1)}
+.dkdeck .back{position:absolute;left:0;top:calc(var(--dw)*.04);width:var(--dw);height:calc(var(--dw)*1.42);border-radius:7px;box-shadow:2px 3px 8px rgba(0,0,0,.5)}
+.dkdeck .card{--cw:var(--dw);position:absolute;left:calc(var(--dw)*.38);top:calc(var(--dw)*.2);transform:rotate(90deg);transform-origin:50% 50%;box-shadow:0 6px 14px rgba(0,0,0,.5)}
+.dkdeck .cnt{position:absolute;left:calc(var(--dw)*.5);top:calc(var(--dw)*-.2);transform:translateX(-50%);background:var(--gold);color:#2a1705;font-weight:800;font-size:12px;border-radius:99px;padding:2px 8px;z-index:3}
+.dkdeck.empty .tr{position:absolute;left:0;top:0;width:var(--dw);height:calc(var(--dw)*1.42);display:grid;place-items:center;border:2px dashed rgba(230,189,94,.45);border-radius:9px;font-size:calc(var(--dw)*.7);color:#f7edd8}
+.dkdeck.empty .tr.red{color:#ff7a8a}
+.dkpairs{--pw:calc(var(--cw)*.88);display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:12px calc(var(--pw)*.5);max-width:min(620px,70vw);min-height:calc(var(--pw)*1.6)}
+.pair{position:relative;width:var(--pw);height:calc(var(--pw)*1.42 + 6px);transition:transform .2s}
+.pair .card{--cw:var(--pw);position:absolute;left:0;top:0;box-shadow:0 8px 18px rgba(0,0,0,.5)}
+.pair .card.d{left:calc(var(--pw)*.36);top:calc(var(--pw)*.22);transform:rotate(8deg);animation:dkd .35s cubic-bezier(.2,.9,.3,1.2) both}
+.pair .card.a.fresh{animation:dka .4s cubic-bezier(.2,.9,.3,1.1) both}
+.pair.tgt{cursor:pointer;transform:translateY(-6px)}
+.pair.tgt .card.a{box-shadow:inset 0 0 0 4px var(--gold),0 0 22px rgba(230,189,94,.8)}
+@keyframes dka{from{opacity:0;transform:translateY(40px) scale(.7)}to{opacity:1}}
+@keyframes dkd{from{opacity:0;transform:translate(30px,-30px) rotate(40deg) scale(.8)}to{opacity:1;transform:rotate(8deg)}}
+.dkflash{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--display);font-size:46px;color:#2a1705;background:linear-gradient(180deg,#f0cf7d,#b98a35);padding:8px 26px 6px;border-radius:16px;border:2px solid #f6dc97;box-shadow:0 14px 36px rgba(0,0,0,.6);animation:pop2 1.2s ease both;z-index:5;pointer-events:none}
+@keyframes pop2{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}30%{transform:translate(-50%,-50%) scale(1)}85%{opacity:1}100%{opacity:0}}
+.card.trumpc{box-shadow:inset 0 0 0 3px rgba(214,168,70,.85),0 4px 12px rgba(0,0,0,.4)}
+/* ---------- Козёл ---------- */
+.kzscore{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:2px}
+.kzscore .tm{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;padding:3px 10px;font-weight:700;font-size:12px;color:var(--muted)}
+.kzscore .tm b{font-family:var(--serif);font-size:19px;color:var(--text);line-height:1}
+.kzscore .tm.us{border-color:rgba(123,224,176,.5)}.kzscore .tm.us b{color:var(--good)}
+.kzscore .tm.them b{color:#ff9d8f}
+.kzscore .mid2{font-size:12px;color:var(--muted);font-weight:700}
+.kz{--kw:calc(var(--cw)*.7);position:relative;width:min(100%,380px);height:calc(var(--kw)*1.42 + var(--kw)*.62);margin:2px auto 0}
+.kz .slot{position:absolute}
+.kz .slot .card{--cw:var(--kw);box-shadow:0 10px 22px rgba(0,0,0,.5);animation:kzin .38s cubic-bezier(.2,.9,.3,1.1) both}
+.kz .slot.r0{left:calc(50% - var(--kw)*.4);bottom:0;--fx:0px;--fy:60px;z-index:4}
+.kz .slot.r1{left:calc(50% - var(--kw)*1.35);top:calc(var(--kw)*.2);--fx:-60px;--fy:0px;z-index:2}
+.kz .slot.r2{left:calc(50% - var(--kw)*.6);top:0;--fx:0px;--fy:-50px;z-index:1}
+.kz .slot.r3{left:calc(50% + var(--kw)*.35);top:calc(var(--kw)*.2);--fx:60px;--fy:0px;z-index:3}
+.kz .slot.win .card{box-shadow:inset 0 0 0 4px var(--gold),0 0 30px rgba(230,189,94,.9)}
+.kz .slot.r1 .card{transform:rotate(-7deg)}.kz .slot.r3 .card{transform:rotate(7deg)}
+@keyframes kzin{from{opacity:0;translate:var(--fx) var(--fy);scale:.6}to{opacity:1;translate:0 0;scale:1}}
+.kz .who{position:absolute;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--muted);white-space:nowrap;bottom:-16px;display:none}
+.kz.empty{display:grid;place-items:center}
+.opps.nofan .fan{display:none}
+.chip.mate{background:rgba(123,224,176,.18);color:var(--good)}.chip.foe{background:rgba(255,138,128,.12);color:#ff9d8f}
+.rescard .tmrow{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);margin-bottom:8px;text-align:left}
+.rescard .tmrow.win{background:linear-gradient(90deg,rgba(123,224,176,.2),rgba(123,224,176,.05));border:1px solid rgba(123,224,176,.4)}
+.rescard .tmrow .big{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--gold)}
+@media (max-width:760px){
+  .dkpairs{--pw:calc(var(--cw)*.82);max-width:92vw;gap:8px calc(var(--pw)*.42)}
+  .dkdeck{--dw:calc(var(--cw)*.6)}
+  .gamepick b{font-size:14px}.gamepick .gi{font-size:22px}
+  .dkflash{font-size:34px}
+}
 @media (max-width:760px){
   header{padding:0 10px;height:54px;gap:6px}.screen{height:calc(100% - 54px)}
   .accbtn .nm,.accbtn .rt,#bSound{display:none}.accbtn{padding:3px!important}body.inroom .logo{display:none}.hbtns{gap:5px}.iconbtn,.hbtns .btn{height:36px}.iconbtn{width:36px}
@@ -307,7 +368,7 @@ table.st td{padding:10px 6px;text-align:center;border-top:1px solid rgba(255,255
 <div id="xch"></div>
 
 <header>
-  <div class="logo"><svg viewBox="0 0 100 100"><use href="#clover"/></svg><span class="t">ДЫРКА</span><small>ПАБ</small></div>
+  <div class="logo"><svg viewBox="0 0 100 100"><use href="#clover"/></svg><span class="t">КАРТОЧНЫЙ</span><small>ПАБ</small></div>
   <div class="tablecode hidden" id="tcode" title="Скопировать ссылку на стол"><span class="w">Стол</span> <b id="tcodeN"></b></div>
   <div class="hbtns">
     <button class="btn iconbtn hidden" id="bInvite" title="Скопировать ссылку-приглашение">🔗</button>
@@ -346,9 +407,11 @@ table.st td{padding:10px 6px;text-align:center;border-top:1px solid rgba(255,255
   <div class="center-wrap">
     <div class="card-panel">
       <div class="suits-deco"><span class="b">♠︎</span><span class="r">♥︎</span><span class="r">♦︎</span><span class="b">♣︎</span></div>
-      <h1>Дырка <em>паб</em></h1>
+      <h1>Карточный <em>паб</em></h1>
       <div class="knot"></div>
-      <p class="sub" id="landSub">Онлайн-версия карточной игры для 3–4 игроков. Создайте стол и отправьте ссылку друзьям — играть можно с телефона или компьютера, без установки. Свободные места займут боты.</p>
+      <p class="sub" id="landSub">Выберите игру, создайте стол и отправьте ссылку друзьям — играть можно с телефона или компьютера, без установки. Свободные места займут боты.</p>
+      <div class="gamepick" id="gamePick"><button data-g="dyrka" class="on"><span class="gi">🕳️</span><b>Дырка</b><small>3–4 игрока</small></button><button data-g="durak"><span class="gi">🃏</span><b>Дурак</b><small>2–4 игрока</small></button><button data-g="kozel"><span class="gi">🐐</span><b>Козёл</b><small>2 на 2</small></button></div>
+      <div class="legend" id="gameDesc"></div>
       <div id="accBox" class="accbox hidden"></div>
       <div id="authBox">
         <div class="seg full" id="authTabs" style="margin-bottom:16px"><button data-m="guest" class="on">Гость</button><button data-m="login">Войти</button><button data-m="register">Регистрация</button></div>
@@ -377,12 +440,12 @@ table.st td{padding:10px 6px;text-align:center;border-top:1px solid rgba(255,255
     <div class="card-panel">
       <h1>Стол <em id="lobCode"></em></h1>
       <div class="knot"></div>
-      <p class="sub">Отправь ссылку друзьям — они зайдут с любого устройства. Пустые места займут боты.</p>
+      <p class="sub" id="lobSub">Отправь ссылку друзьям — они зайдут с любого устройства. Пустые места займут боты.</p>
       <div class="invite"><input id="lobLink" readonly><button class="btn gold" id="bCopy">Копировать</button></div>
       <div class="players" id="lobPlayers"></div>
       <div class="row" style="align-items:center;margin-bottom:16px" id="lobCfg">
         <span class="legend" style="flex:1">Игроков за столом</span>
-        <div class="seg" id="seg"><button data-n="3">3</button><button data-n="4">4</button></div>
+        <div class="seg" id="seg"><button data-n="2">2</button><button data-n="3">3</button><button data-n="4">4</button></div>
       </div>
       <button class="btn gold big" id="bStart" style="width:100%">Начать игру</button>
       <div class="legend" id="lobWait" style="text-align:center;margin-top:12px"></div>
@@ -445,6 +508,9 @@ function cardHTML(id, cls = '', style = '') {
 
 /* ---------- состояние ---------- */
 let S = null, ws = null, token = null, room = null, myName = '';
+const GAMEINFO = { dyrka: { n: 'Дырка', d: 'Шеддинг-игра для 3–4 игроков: кто первым избавится от карт — становится боссом, последний — дыркой.' }, durak: { n: 'Дурак', d: 'Подкидной дурак на 2–4 игрока: отбивайся, подкидывай и не оставайся последним с картами.' }, kozel: { n: 'Козёл', d: 'Командная игра на четверых: две пары, постоянные козыри и шамок. Играют до 12 штрафных очков.' } };
+const qs = new URLSearchParams(location.search);
+let selGame = GAMEINFO[qs.get('game')] ? qs.get('game') : (GAMEINFO[ls.get('dyrka_game')] ? ls.get('dyrka_game') : 'dyrka');
 let offset = 0, retry = 0, leaving = false, sel = new Set(), lastSeq = -1, lastReactSeq = 0, lastKon = -1, chatSeen = 0, chatOpen = false;
 let soundOn = ls.get('dyrka_sound') !== '0', actx = null, lastTurnBeep = '';
 
@@ -466,7 +532,8 @@ async function copy(text, msg) {
   try { await navigator.clipboard.writeText(text); toast(msg || 'Скопировано'); }
   catch (e) { const i = document.createElement('input'); i.value = text; document.body.appendChild(i); i.select(); try { document.execCommand('copy'); toast(msg || 'Скопировано'); } catch (_) { toast(text); } i.remove(); }
 }
-const link = () => location.origin + location.pathname + '?room=' + room;
+const curGame = () => (S && S.game) || selGame;
+const link = () => location.origin + location.pathname + '?room=' + room + '&game=' + curGame();
 const send = (o) => ws && ws.readyState === 1 && ws.send(JSON.stringify(o));
 const initial = (n) => esc((n || '?').trim().charAt(0).toUpperCase());
 const PRESETS = [['🦊',28],['🐻',25],['🦁',42],['🐼',200],['🐯',32],['🦉',35],['🐸',130],['🐙',330],['🦄',290],['🐲',150],['🦅',210],['🐺',230]];
@@ -500,7 +567,7 @@ async function apiCall(path, body) {
 /* ---------- сеть ---------- */
 function connect() {
   ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host);
-  ws.onopen = () => { retry = 0; $('#banner').classList.add('hidden'); send({ t: 'join', room, name: myName, token, auth: auth ? auth.token : null }); };
+  ws.onopen = () => { retry = 0; $('#banner').classList.add('hidden'); send({ t: 'join', room, name: myName, token, auth: auth ? auth.token : null, game: selGame }); };
   ws.onmessage = (e) => {
     const m = JSON.parse(e.data);
     if (m.t === 'joined') { if (m.token) { token = m.token; ls.set('dyrka_tok_' + room, token); } }
@@ -518,7 +585,7 @@ setInterval(() => send({ t: 'ping' }), 20000);
 function enterRoom(code, name) {
   room = code; myName = name; ls.set('dyrka_name', name);
   token = ls.get('dyrka_tok_' + room);
-  history.replaceState(null, '', '?room=' + room);
+  history.replaceState(null, '', '?room=' + room + '&game=' + selGame);
   leaving = false; connect();
 }
 
@@ -651,11 +718,13 @@ function renderLobby() {
   $('#lobLink').value = link();
   const hum = S.seats;
   let html = hum.map((p) => `<div class="pl">${avHTML(p, 38)}<span class="nm">${esc(p.name)}</span>${p.rating != null ? `<span class="rt">★ ${p.rating}</span>` : ""}${p.host ? '<span class="tag">хозяин</span>' : ''}</div>`).join('');
-  const slots = Math.max(S.numSeats, hum.length);
+  const slots = S.game === 'kozel' ? 4 : Math.max(S.numSeats, hum.length);
   for (let i = hum.length; i < slots; i++) html += `<div class="pl empty"><div class="av" style="--h:150;--s:38px;opacity:.5">🤖</div><span>Свободно — будет бот</span></div>`;
   $('#lobPlayers').innerHTML = html;
   document.querySelectorAll('#seg button').forEach((b) => b.classList.toggle('on', +b.dataset.n === Math.max(S.numSeats, hum.length)));
-  $('#lobCfg').classList.toggle('hidden', !S.isHost);
+  $('#lobCfg').classList.toggle('hidden', !S.isHost || S.game === 'kozel');
+  document.querySelectorAll('#seg button').forEach((b) => b.classList.toggle('hidden', S.game === 'dyrka' && +b.dataset.n === 2));
+  $('#lobSub').textContent = (GAMEINFO[S.game] ? GAMEINFO[S.game].n + '. ' : '') + (S.game === 'kozel' ? 'Первые двое за столом садятся в одну пару, остальные места займут боты.' : 'Отправь ссылку друзьям — они зайдут с любого устройства. Пустые места займут боты.');
   $('#bStart').classList.toggle('hidden', !S.isHost);
   $('#lobWait').textContent = S.isHost ? '' : 'Ждём, пока хозяин стола начнёт игру…';
 }
@@ -669,6 +738,7 @@ const remaining = () => Math.max(0, S.deadline - (Date.now() + offset));
 function cardW() { return Math.round(Math.max(48, Math.min(84, innerWidth * 0.165, (innerHeight - 500) / 2.75))); }
 
 function renderGame() {
+  if (S.game && S.game !== 'dyrka') return renderAlt();
   const m = S;
   document.documentElement.style.setProperty('--cw', cardW() + 'px');
   $('#konN').textContent = 'Кон ' + m.kon;
@@ -822,6 +892,211 @@ function hint() {
   renderCtrls(); renderHand(false);
 }
 
+
+/* ---------- карты 36/32: Дурак и Козёл ---------- */
+const RK9 = ['6','7','8','9','10','J','Q','K','A'];
+const SUITCH = ['♠','♥','♦','♣'];
+const PIPS6 = PIPS[0].slice(0, 6);
+function cardHTML9(id, cls = '', style = '') {
+  const r = id % 9, s = (id / 9) | 0, red = s === 1 || s === 2;
+  let face = '';
+  if (r <= 4) {
+    const P = r === 0 ? PIPS6 : PIPS[r - 1];
+    face = P.map(([x, y]) => `<svg class="pip ${y > 50 ? 'flip' : ''}" style="left:${x}%;top:${y}%;--ps:${r < 3 ? '.95em' : '.82em'}" viewBox="0 0 100 100"><use href="#s${s}"/></svg>`).join('');
+  } else if (r === 8) face = `<div class="ace">${suitSvg(s)}</div>`;
+  else face = `<div class="court"><svg class="crown" viewBox="0 0 60 36"><use href="#crown"/></svg><b>${RK9[r]}</b>${suitSvg(s)}</div>`;
+  const idx = `<b>${RK9[r]}</b>${suitSvg(s)}`;
+  return `<div class="card ${red ? 'red' : ''} ${cls}" data-id="${id}" style="${style}"><div class="ornaments"></div><div class="idx">${idx}</div>${face}<div class="idx br">${idx}</div></div>`;
+}
+const isTrumpK = (c) => c % 9 === 6 || c % 9 === 5 || ((c / 9) | 0) === 3;
+const isTrumpCard = (c) => (S.game === 'durak' ? ((c / 9) | 0) === S.trump : isTrumpK(c));
+const myTeam = () => S.you % 2;
+
+function renderAlt() {
+  const m = S, g = m.game;
+  document.documentElement.style.setProperty('--cw', cardW() + 'px');
+  $('#konN').textContent = g === 'durak' ? 'Партия ' + m.kon : 'Раунд ' + m.kon;
+  $('#konSub').textContent = g === 'durak' ? (m.phase === 'between' ? 'партия окончена' : 'козырь ' + SUITCH[m.trump] + ' · в колоде ' + m.deckCount) : 'штраф: мы ' + m.pen[myTeam()] + ' : ' + m.pen[1 - myTeam()] + ' они';
+  const act = m.lastAction && m.lastAction.seq !== lastSeq ? m.lastAction : null;
+  sel = new Set([...sel].filter((c) => m.hand.includes(c) && (!m.legal.length || m.legal.includes(c))));
+  if (!myTurn()) sel.clear();
+  const opps = [];
+  for (let k = 1; k < n(); k++) opps.push((m.you + k) % n());
+  $('#opps').className = 'opps n' + n() + (g === 'kozel' ? ' nofan' : '');
+  $('#opps').innerHTML = opps.map((i) => oppAlt(i, act)).join('');
+  $('#mid').innerHTML = g === 'durak' ? midDurak(act) : midKozel(act);
+  const me = m.seats[m.you], turn = myTurn();
+  let chips = turn ? '<span class="chip turn">Ходит</span>' : '';
+  if (!turn && g === 'durak' && m.phase === 'play') chips = me.role === 'att' ? '<span class="chip last">Атакует</span>' : me.role === 'def' ? '<span class="chip out">Защита</span>' : '';
+  if (me.place) chips = `<span class="chip out">Вышел #${me.place}</span>`;
+  if (g === 'kozel') chips += ` <span class="chip mate">${m.you % 2 ? 'Пара 2' : 'Пара 1'}</span>`;
+  $('#me').innerHTML = `<div class="mepanel ${turn ? 'on-turn' : ''}">
+      ${avHTML(me, 46)}
+      <div><div class="nm">${esc(me.name)} ${chips}</div><div class="sub">Твои карты · ${me.count}</div></div></div>
+    <div class="timer ${turn ? 'on' : ''}" id="myTimer"><svg class="ring" viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" cx="30" cy="30" r="26"/></svg><span id="myTimerN">${turn ? Math.ceil(remaining() / 1000) : '·'}</span></div>`;
+  renderCtrlsAlt();
+  renderHandAlt(m.kon !== lastKon);
+  lastKon = m.kon;
+  if (act) { lastSeq = act.seq; if (['play', 'defend', 'trick'].includes(act.type)) beep(act.seat === S.you ? 420 : 330, .08); else if (['pass', 'take', 'bito', 'took'].includes(act.type)) beep(200, .06, .025); }
+  if (turn) { const k = m.kon + ':' + m.deadline; if (k !== lastTurnBeep) { lastTurnBeep = k; beep(740, .12, .05); } }
+  if (m.phase === 'between') showResultsAlt(); else hideResults();
+}
+
+function oppAlt(i, act) {
+  const p = S.seats[i], g = S.game, onT = S.phase === 'play' && S.turn === i;
+  const chips = [];
+  if (onT) chips.push('<span class="chip turn">Ходит</span>');
+  else if (g === 'durak' && S.phase === 'play' && p.role) chips.push(p.role === 'att' ? '<span class="chip last">Атакует</span>' : '<span class="chip out">Защита</span>');
+  if (g === 'kozel') chips.push(p.team === myTeam() ? '<span class="chip mate">Партнёр</span>' : '<span class="chip foe">Соперник</span>');
+  if (p.place) chips.push(`<span class="chip out">Вышел #${p.place}</span>`);
+  if (!p.live) chips.push('<span class="chip dead">нет связи</span>');
+  const POP = { play: ['ХОД', ''], defend: ['БЬЁТ', ''], take: ['БЕРУ', 'pass'], pass: ['ПАС', 'pass'] };
+  const pp = act && act.seat === i && g === 'durak' ? POP[act.type] : null;
+  const pop = pp ? `<div class="pop ${pp[1]}">${pp[0]}</div>` : '';
+  const cnt = Math.min(p.count, 12), mid = (cnt - 1) / 2;
+  const fan = Array.from({ length: cnt }, (_, k) => `<div class="back" style="--r:${((k - mid) * 2.2).toFixed(1)}deg"></div>`).join('');
+  return `<div class="opp ${onT ? 'on-turn' : ''} ${p.place ? 'out' : ''}" data-seat="${i}">${pop}
+    ${avHTML(p, 0, '<svg class="ring" viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" cx="30" cy="30" r="26"/></svg>')}
+    <div class="nm">${p.bot ? '🤖' : ''}${esc(p.name)}</div>
+    <div class="sub">Карт · ${p.count}</div>
+    <div>${chips.join(' ')}</div>
+    <div class="fan">${fan}</div></div>`;
+}
+
+let dkPairsSeen = 0;
+function midDurak(act) {
+  const m = S;
+  if (m.phase !== 'play') return `<div class="lbl dim">Партия окончена</div>`;
+  const redT = m.trump === 1 || m.trump === 2;
+  const deck = m.deckCount > 0
+    ? `<div class="dkdeck"><div class="back"></div>${cardHTML9(m.trumpCard, 'trumpc')}<span class="cnt">${m.deckCount}</span></div>`
+    : `<div class="dkdeck empty"><div class="tr ${redT ? 'red' : ''}">${SUITCH[m.trump]}</div><span class="cnt">0</span></div>`;
+  const selC = sel.size === 1 ? [...sel][0] : null;
+  const tg = selC != null && m.mode === 'defend' && m.beatMap ? (m.beatMap[selC] || []) : [];
+  const pairs = m.pairs.map((p, k) => {
+    const fresh = k >= dkPairsSeen && act && act.type === 'play';
+    return `<div class="pair ${tg.includes(k) && p.d == null ? 'tgt' : ''}" data-k="${k}">${cardHTML9(p.a, 'a ' + (fresh ? 'fresh' : '') + (isTrumpCard(p.a) ? ' trumpc' : ''))}${p.d != null ? cardHTML9(p.d, 'd' + (isTrumpCard(p.d) ? ' trumpc' : '')) : ''}</div>`;
+  }).join('');
+  dkPairsSeen = m.pairs.length;
+  let hint;
+  if (m.resolving) hint = '';
+  else if (myTurn()) hint = m.mode === 'defend' ? 'Отбейся картой старше или <b>возьми</b>' : (m.pairs.length ? (m.mode === 'take' ? 'Можно подкинуть — ' + esc(m.seats[m.def].name) + ' берёт' : '<b>Подкинь</b> или скажи «Бито»') : '<b>Твой заход</b> — выложи карту (можно несколько одного номинала)');
+  else hint = m.turn >= 0 ? 'Ход: ' + esc(m.seats[m.turn].name) + (m.mode === 'defend' ? ' (защита)' : '') : '';
+  const flash = m.resolving ? `<div class="dkflash">${m.resolving === 'bito' ? 'Бито!' : 'Берёт'}</div>` : '';
+  const empty = m.pairs.length ? '' : `<div class="lbl dim" style="font-size:22px">Стол пуст</div>`;
+  return `<div class="dk">${deck}<div class="dkpairs">${pairs || empty}</div>${flash}</div><div class="hint">${hint}</div><div class="say">${esc(m.msg || '')}</div>`;
+}
+
+function midKozel(act) {
+  const m = S, us = myTeam();
+  const ptsT = m.roundPts;
+  const score = `<div class="kzscore"><div class="tm us">Мы <b>${m.pen[us]}</b></div><div class="mid2">до ${m.limit} · взятки ${m.tricksWon[us]}:${m.tricksWon[1 - us]} · колода ${m.stock}</div><div class="tm them">Они <b>${m.pen[1 - us]}</b></div></div>`;
+  if (m.phase !== 'play') return score + `<div class="lbl dim">Раунд окончен</div>`;
+  const slots = m.trick.map((t, k) => {
+    const r = (t.seat - m.you + 4) % 4, fresh = act && (act.type === 'play') && k === m.trick.length - 1;
+    return `<div class="slot r${r} ${m.reveal && m.winner === t.seat ? 'win' : ''}">${cardHTML9(t.card, (fresh || true ? '' : '') + (isTrumpK(t.card) ? ' trumpc' : ''))}</div>`;
+  }).join('');
+  let hint;
+  if (m.reveal) hint = 'Взятку берёт <b>' + esc(m.seats[m.winner].name) + '</b>' + (m.winner % 2 === us ? ' — наши!' : '');
+  else if (myTurn()) hint = !m.trick.length ? (m.praised ? 'Хвалёнка: можно ходить козырем' : '<b>Твой заход</b> — ходи простой картой') : 'Ходи в масть захода (козыри — всегда козыри)';
+  else hint = m.turn >= 0 ? 'Ход: ' + esc(m.seats[m.turn].name) : '';
+  return `${score}<div class="kz ${m.trick.length ? '' : 'empty'}">${slots || '<div class="lbl dim" style="font-size:22px">Стол пуст</div>'}</div><div class="hint">${hint}</div>`;
+}
+
+function dkSelValid() {
+  if (!myTurn() || !sel.size || S.mode === 'defend') return false;
+  const a = [...sel];
+  if (!a.every((c) => S.legal.includes(c)) || a.length > S.room) return false;
+  if (!S.pairs.length) return a.every((c) => c % 9 === a[0] % 9);
+  return true;
+}
+function renderCtrlsAlt() {
+  const turn = myTurn(), g = S.game;
+  if (g === 'kozel') {
+    const ok = turn && sel.size === 1 && S.legal.includes([...sel][0]);
+    $('#ctrls').innerHTML = `${S.canPraise ? `<button class="btn ${S.praised ? 'gold' : ''}" id="bPraise">Хвалюсь${S.praised ? ' ✓' : ''}</button>` : ''}<button class="btn gold" id="bPlayA" ${ok ? '' : 'disabled'}>Сыграть</button>`;
+    const bp = $('#bPraise'); if (bp) bp.onclick = () => send({ t: 'praise' });
+  } else if (S.mode === 'defend') {
+    const ok = turn && sel.size === 1 && S.beatMap && S.beatMap[[...sel][0]];
+    $('#ctrls').innerHTML = `<button class="btn" id="bTake" ${turn ? '' : 'disabled'}>Беру</button><button class="btn gold" id="bPlayA" ${ok ? '' : 'disabled'}>Побить</button>`;
+    $('#bTake').onclick = () => { sel.clear(); send({ t: 'take' }); };
+  } else {
+    const can = turn && S.pairs.length;
+    $('#ctrls').innerHTML = `<button class="btn" id="bPass" ${can ? '' : 'disabled'}>${S.mode === 'take' ? 'Не подкидывать' : 'Бито'}</button><button class="btn gold" id="bPlayA" ${dkSelValid() ? '' : 'disabled'}>${S.pairs.length ? 'Подкинуть' : 'Ходить'}${sel.size > 1 ? ' ×' + sel.size : ''}</button>`;
+    $('#bPass').onclick = () => { sel.clear(); send({ t: 'pass' }); };
+  }
+  $('#bPlayA').onclick = playAlt;
+}
+function playAlt(on) {
+  if (!myTurn() || !sel.size) return;
+  if (S.game === 'kozel') send({ t: 'play', card: [...sel][0] });
+  else if (S.mode === 'defend') { if (sel.size !== 1) return; send({ t: 'play', card: [...sel][0], on: typeof on === 'number' ? on : -1 }); }
+  else if (dkSelValid()) send({ t: 'play', cards: [...sel] });
+  else return;
+  sel.clear();
+  renderAlt();
+}
+function renderHandAlt(deal) {
+  const el = $('#hand'), h = S.hand, cw = cardW();
+  const W = Math.min(el.clientWidth || innerWidth - 28, 960);
+  const step = h.length > 1 ? Math.min(cw * 0.8, (W - cw) / (h.length - 1)) : 0;
+  const left0 = (el.clientWidth - (step * (h.length - 1) + cw)) / 2;
+  const turn = myTurn();
+  el.innerHTML = h.map((c, i) => {
+    const dim = turn && !S.legal.includes(c);
+    const cls = `${sel.has(c) ? 'sel' : ''} ${dim ? 'dim' : ''} ${deal ? 'deal' : ''} ${isTrumpCard(c) ? 'trumpc' : ''}`;
+    return cardHTML9(c, cls, `--x:${(left0 + i * step).toFixed(1)}px;--z:${i + 1};--i:${i}`);
+  }).join('');
+  el.querySelectorAll('.card').forEach((node) => node.addEventListener('click', () => onCardAlt(+node.dataset.id, node)));
+}
+function onCardAlt(id, node) {
+  if (!myTurn()) { toast(S.phase === 'play' ? (S.turn >= 0 ? 'Сейчас ходит ' + S.seats[S.turn].name : 'Подождите…') : 'Раунд завершён'); return; }
+  if (!S.legal.includes(id)) { node.classList.remove('shake'); void node.offsetWidth; node.classList.add('shake'); if (S.game === 'kozel') toast('Так ходить нельзя: нужно ходить в масть, а в начале хода — простой картой'); return; }
+  if (S.game === 'kozel') { if (sel.has(id)) return playAlt(); sel = new Set([id]); }
+  else if (S.mode === 'defend') { if (sel.has(id)) sel.clear(); else sel = new Set([id]); }
+  else if (sel.has(id)) sel.delete(id);
+  else {
+    if (!S.pairs.length && sel.size && sel.values().next().value % 9 !== id % 9) sel.clear();
+    if (sel.size >= S.room) { if (S.room === 1) sel.clear(); else { toast('Больше карт подкинуть нельзя'); return; } }
+    sel.add(id);
+  }
+  beep(600, .04, .03);
+  renderAlt();
+}
+$('#mid').addEventListener('click', (e) => {
+  const pr = e.target.closest('.pair.tgt');
+  if (!pr || !S || S.game !== 'durak' || S.mode !== 'defend') return;
+  playAlt(+pr.dataset.k);
+});
+
+function showResultsAlt() {
+  const el = $('#results'), g = S.game, nn = n();
+  let html;
+  if (g === 'durak') {
+    const rows = S.finish.map((i, k) => {
+      const p = S.seats[i], fool = i === S.loser;
+      return `<div class="place ${k === 0 && !fool ? 'boss' : fool ? 'hole' : ''}"><span class="n">${k + 1}</span>${avHTML(p, 34)}<span class="nm">${esc(p.name)}${i === S.you ? ' (ты)' : ''}</span><span class="tg">${fool ? '🤡 Дурак' : k === 0 ? '🏆 Вышел первым' : ''}</span></div>`;
+    }).join('');
+    const youFool = S.loser === S.you, youFirst = S.finish[0] === S.you;
+    const title = S.loser < 0 ? 'Ничья' : youFool ? 'Ты — дурак 🤡' : youFirst ? 'Ты вышел первым! 🏆' : esc(S.seats[S.loser].name) + ' — дурак';
+    html = `<div class="rescard"><h2>${title}</h2><div class="sub">Партия ${S.kon} окончена</div>${rows}`;
+    if (shownKon !== S.kon) { shownKon = S.kon; if (youFirst) confetti(); beep(youFool ? 300 : 880, .3, .05); }
+  } else {
+    const us = myTeam(), rp = S.roundPts || [0, 0];
+    const names = (t) => S.seats.filter((_, i) => i % 2 === t).map((p) => esc(p.name)).join(' + ');
+    const win = S.gameOver ? 1 - S.loserTeam : (rp[0] === rp[1] ? -1 : rp[0] > rp[1] ? 0 : 1);
+    const row = (t) => `<div class="tmrow ${win === t ? 'win' : ''}"><div><div class="nm" style="font-weight:800">${t === us ? 'Мы' : 'Они'}</div><div class="legend">${names(t)}</div></div><div style="text-align:right"><div class="big">${rp[t]}</div><div class="legend">штраф ${S.pen[t]} / ${S.limit}</div></div></div>`;
+    const title = S.gameOver ? (S.loserTeam === us ? 'Вы проиграли игру' : 'Вы выиграли игру! 🏆') : win < 0 ? 'Ровно 60 : 60' : win === us ? 'Раунд за нами!' : 'Раунд у соперников';
+    html = `<div class="rescard"><h2>${title}</h2><div class="sub">${esc(S.special || (win < 0 ? 'Штрафных очков нет' : 'Проигравшая пара получает 2 штрафных очка'))}</div>${row(us)}${row(1 - us)}`;
+    if (shownKon !== S.kon) { shownKon = S.kon; if (win === us && S.gameOver) confetti(); beep(win === us ? 880 : 300, .3, .05); }
+  }
+  html += `${S.isHost ? `<button class="btn gold big" id="bNext" style="width:100%;margin-top:6px">${S.gameOver ? 'Новая игра' : g === 'durak' ? 'Новая партия' : 'Следующий раунд'}</button>` : ''}
+    <div class="cd">Дальше через <b id="cd">${Math.max(0, Math.ceil((S.nextAt - (Date.now() + offset)) / 1000))}</b> с</div></div>`;
+  el.innerHTML = html;
+  el.classList.remove('hidden');
+  const b = $('#bNext'); if (b) b.onclick = () => send({ t: 'next' });
+}
+
 /* ---------- таймер ---------- */
 const C = 163.4;
 function tick() {
@@ -892,15 +1167,38 @@ $('#chatForm').onsubmit = (e) => { e.preventDefault(); const v = $('#chatIn').va
 /* ---------- модалки ---------- */
 function openModal(html) { const m = $('#modal'); m.innerHTML = `<div class="modal">${html}<button class="btn gold" id="mClose" style="width:100%">Понятно</button></div>`; m.classList.remove('hidden'); $('#mClose').onclick = closeModal; m.onclick = (e) => { if (e.target === m) closeModal(); }; }
 function closeModal() { $('#modal').classList.add('hidden'); }
-$('#bRules').onclick = () => openModal(`<h2>Как играть</h2><ol>
+const RULES = {
+  durak: `<h2>Дурак (подкидной)</h2><ol>
+    <li>Колода 36 карт, всем по <b>6</b>. Последняя карта колоды — козырь, её масть старше остальных.</li>
+    <li>Первым ходит владелец <b>младшего козыря</b>. Атакующий выкладывает карту (можно несколько одного номинала), защитник бьёт её картой той же масти старше или козырем.</li>
+    <li>Когда всё побито, атакующие могут <b>подкинуть</b> карты тех номиналов, что уже лежат на столе. Подкинуть можно не больше 6 карт и не больше, чем карт у защитника. Нечего подкидывать — «Бито».</li>
+    <li>Не можешь или не хочешь бить — нажми <b>«Беру»</b>: остальные ещё могут подкинуть, и ты забираешь все карты.</li>
+    <li>После раунда все добирают до 6 карт. Кто остался с картами последним — <b>дурак</b>.</li></ol>
+    <p class="legend">На ход даётся 20 секунд. Не успел: атакующий ходит младшей картой, защитник берёт.</p>`,
+  kozel: `<h2>Козёл (2 на 2)</h2><ol>
+    <li>Колода 32 карты (без шестёрок), всем по 4, остальное — колода. Играют две пары, партнёры сидят напротив.</li>
+    <li>Козыри постоянны: <b>все дамы, все валеты и все трефы</b>. Старший козырь — <b>шамок</b> (7♣), затем дамы (♣ ♠ ♥ ♦), валеты, трефы A, 10, K, 9, 8.</li>
+    <li>Заходящий ходит простой картой (не козырем). Остальные обязаны ответить <b>в масть захода</b>; если масти нет — кладут любую карту или бьют козырем. Взятку берёт старший козырь или старшая карта масти.</li>
+    <li>Взявший ходит следующим. После каждой взятки все берут по карте из колоды.</li>
+    <li>Очки: туз 11, десятка 10, король 4, дама 3, валет 2. Нужно набрать больше <b>60</b>. Меньше 60 — 2 штрафных очка; ровно 60 : 60 — ничьё. Игра до <b>12</b> штрафных.</li>
+    <li><b>Хвалёнка</b>: в первой взятке заходящий может нажать «Хвалюсь» и ходить козырем.</li>
+    <li>Если в одной взятке окажутся дама треф и шамок от разных пар, раунд сразу заканчивается и паре с дамой треф идут <b>4 штрафных очка</b>.</li></ol>
+    <p class="legend">На ход даётся 15 секунд. Нажми на карту, затем на неё же ещё раз (или «Сыграть»). Единственный допустимый ход делается сам.</p>`
+};
+$('#bRules').onclick = () => { const g = curGame(); if (RULES[g]) return openModal(RULES[g]); openModal(`<h2>Как играть</h2><ol>
   <li>В первом коне начинает тот, у кого <b>туз бубен</b>. Заходить можно <b>1–4 картами</b> одного номинала.</li>
   <li>Перебивай <b>тем же количеством</b> карт старшего номинала — или пасуй. Масть не важна. Если перебить нечем, пас ставится автоматически.</li>
   <li>Когда очередь вернулась к автору последней комбинации, он начинает новый круг. Если он уже вышел, заходит следующий игрок с картами.</li>
   <li>Первый без карт — <b>босс</b>, последний — <b>дырка</b>. В следующем коне при том же составе дырка отдаёт боссу две старшие карты, получает две младшие и ходит первой.</li>
   <li>На ход даётся <b>15 секунд</b>. Не успел — автоматический пас, а если нужно заходить, выкладываются все карты младшего номинала.</li></ol>
-  <p class="legend">Старшинство: 7 → 8 → 9 → 10 → J → Q → K → A. Нажми на карту, чтобы выбрать её; при ответе выбирается сразу нужное количество.</p>`);
+  <p class="legend">Старшинство: 7 → 8 → 9 → 10 → J → Q → K → A. Нажми на карту, чтобы выбрать её; при ответе выбирается сразу нужное количество.</p>`); };
 $('#bStats').onclick = () => {
   if (!S) return;
+  if (S.game !== 'dyrka') {
+    const k = S.game === 'durak';
+    const r2 = S.seats.map((p, i) => `<tr><td>${p.bot ? '🤖 ' : ''}${esc(p.name)}${i === S.you ? ' (ты)' : ''}</td><td>${p.stats.boss}</td><td>${p.stats.dyrka}</td><td>${p.stats.kons}</td></tr>`).join('');
+    return openModal(`<h2>Статистика</h2><table class="st"><tr><th>Игрок</th><th>${k ? '🏆 Первым' : '🏆 Побед'}</th><th>${k ? '🤡 Дураком' : '💔 Поражений'}</th><th>${k ? 'Партий' : 'Раундов'}</th></tr>${r2}</table><div class="legend">Рейтинг пока считается только в «Дырке».</div>`);
+  }
   const rows = S.seats.map((p, i) => `<tr><td>${p.bot ? '🤖 ' : ''}${esc(p.name)}${i === S.you ? ' (ты)' : ''}</td><td>${p.stats.boss}</td><td>${p.stats.dyrka}</td><td>${p.stats.kons}</td></tr>`).join('');
   openModal(`<h2>Статистика</h2><table class="st"><tr><th>Игрок</th><th>👑 Боссом</th><th>🕳️ Дыркой</th><th>Конов</th></tr>${rows}</table>`);
 };
@@ -1023,6 +1321,13 @@ $('#bLb').onclick = async () => {
 
 /* ---------- вход ---------- */
 const urlRoom = (new URLSearchParams(location.search).get('room') || '').replace(/\D/g, '');
+function setGame(g) {
+  selGame = GAMEINFO[g] ? g : 'dyrka'; ls.set('dyrka_game', selGame);
+  document.querySelectorAll('#gamePick button').forEach((b) => b.classList.toggle('on', b.dataset.g === selGame));
+  $('#gameDesc').textContent = GAMEINFO[selGame].d;
+}
+document.querySelectorAll('#gamePick button').forEach((b) => (b.onclick = () => setGame(b.dataset.g)));
+setGame(selGame);
 $('#inName').value = ls.get('dyrka_name') || '';
 function needName() {
   if (auth) return auth.user.username;
@@ -1037,7 +1342,7 @@ $('#inName').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#bCr
 if (urlRoom) {
   // зашли по ссылке-приглашению
   $('#landSub').textContent = 'Вас приглашают за стол ' + urlRoom + '. Войдите в аккаунт или продолжите как гость.';
-  $('#bCreate').textContent = 'Сесть за стол'; $('#orLine').classList.add('hidden'); $('#joinRow').classList.add('hidden');
+  $('#bCreate').textContent = 'Сесть за стол'; $('#orLine').classList.add('hidden'); $('#joinRow').classList.add('hidden'); $('#gamePick').classList.add('hidden'); $('#gameDesc').textContent = 'Игра: ' + GAMEINFO[selGame].n + '.';
   $('#bCreate').onclick = () => { const nm = needName(); if (nm) enterRoom(urlRoom, nm); };
 }
 (async () => {
@@ -1053,7 +1358,7 @@ if (urlRoom) {
   if (urlRoom && (auth || (ls.get('dyrka_name') && ls.get('dyrka_tok_' + urlRoom)))) enterRoom(urlRoom, auth ? auth.user.username : ls.get('dyrka_name'));
 })();
 showScreen('landing');
-addEventListener('resize', () => { if (S && S.phase !== 'lobby') { document.documentElement.style.setProperty('--cw', cardW() + 'px'); renderHand(false); } });
+addEventListener('resize', () => { if (S && S.phase !== 'lobby') { document.documentElement.style.setProperty('--cw', cardW() + 'px'); if (S.game && S.game !== 'dyrka') renderAlt(); else renderHand(false); } });
 })();
 </script>
 </body>

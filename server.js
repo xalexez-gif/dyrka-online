@@ -5,6 +5,9 @@ const path = require('path');
 const crypto = require('crypto');
 const { WebSocketServer } = require('ws');
 const { Room } = require('./game');
+const { DurakRoom } = require('./durak');
+const { KozelRoom } = require('./kozel');
+const GAMES = { dyrka: Room, durak: DurakRoom, kozel: KozelRoom };
 const { createStore } = require('./store');
 
 const PORT = process.env.PORT || 3000;
@@ -182,8 +185,9 @@ function attach() {
           let r = rooms.get(code);
           if (!r) {
             if (rooms.size > 500) return send(ws, { t: 'err', msg: 'Сервер перегружен, попробуйте позже' });
-            r = new Room(code, broadcast);
-            r.onKonEnd = rateKon;
+            const gk = GAMES[m.game] ? m.game : 'dyrka';
+            r = new GAMES[gk](code, broadcast);
+            if (gk === 'dyrka') r.onKonEnd = rateKon;
             r.onProfile = refreshProfile;
             rooms.set(code, r);
           }
