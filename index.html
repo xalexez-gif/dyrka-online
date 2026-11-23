@@ -78,6 +78,31 @@ header{height:60px;display:flex;align-items:center;gap:10px;padding:0 16px;borde
 /* ---------- аватары ---------- */
 .av{--s:46px;width:var(--s);height:var(--s);border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:calc(var(--s)*.5);
   background:radial-gradient(circle at 30% 25%,hsl(var(--h) 40% 30%),hsl(var(--h) 45% 14%));color:var(--gold);border:1.5px solid rgba(236,201,121,.55);position:relative;flex:none;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.av img{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover}
+.av.pr{border-color:rgba(255,255,255,.5);font-size:calc(var(--s)*.52);font-family:system-ui,'Apple Color Emoji','Segoe UI Emoji',sans-serif}
+.rt{font-size:11px;font-weight:800;color:var(--gold);letter-spacing:.04em;white-space:nowrap}
+.accbtn{display:flex;align-items:center;gap:8px;padding:3px 14px 3px 3px!important;border-radius:99px!important}
+.accbtn .av{--s:34px;box-shadow:none}
+.accbtn .nm{font-weight:800;font-size:13px;max-width:110px;overflow:hidden;text-overflow:ellipsis}
+.accbox{display:flex;align-items:center;gap:14px;padding:14px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);margin-bottom:16px}
+.accbox .av{--s:56px}.accbox .nm{font-weight:800;font-size:18px}.accbox .sub2{color:var(--muted);font-size:13px;margin-top:2px;font-weight:600}
+.accbox .btns{margin-left:auto;display:flex;gap:8px}
+.seg.full{display:flex;width:100%}.seg.full button{flex:1}
+.avgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:10px 0 16px}
+.avgrid button{background:none;border:2px solid transparent;border-radius:50%;padding:2px;aspect-ratio:1;display:grid;place-items:center}
+.avgrid button.on{border-color:var(--gold)}.avgrid .av{--s:100%;width:100%;height:auto;aspect-ratio:1;font-size:26px}
+.prof{display:flex;gap:16px;align-items:center;margin-bottom:14px}.prof .av{--s:84px}
+.prof .nm{font-family:var(--serif);font-size:30px;font-weight:700;line-height:1}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 14px}
+.stats4 div{background:rgba(255,255,255,.05);border-radius:12px;padding:10px 6px;text-align:center}
+.stats4 b{display:block;font-family:var(--serif);font-size:24px;color:var(--gold)}.stats4 span{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.lbrow{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:14px;background:rgba(255,255,255,.04);margin-bottom:7px}
+.lbrow .n{font-family:var(--serif);font-size:22px;font-weight:700;width:26px;color:var(--gold);text-align:center}
+.lbrow .av{--s:38px}.lbrow .nm{font-weight:800}.lbrow .meta{font-size:12px;color:var(--muted);font-weight:600}
+.lbrow .big{margin-left:auto;font-family:var(--serif);font-size:24px;font-weight:700;color:var(--gold)}
+.lbrow.me{border:1px solid rgba(236,201,121,.45);background:rgba(236,201,121,.1)}
+.delta{font-weight:800;font-size:13px}.delta.up{color:var(--good)}.delta.down{color:var(--bad)}.delta.zero{color:var(--muted)}
+.errline{color:var(--bad);font-weight:700;font-size:14px;min-height:20px;margin-top:8px}
 .ring{position:absolute;inset:-7px;width:calc(100% + 14px);height:calc(100% + 14px);transform:rotate(-90deg);pointer-events:none;opacity:0;transition:opacity .2s}
 .ring circle{fill:none;stroke-width:3.2;stroke-linecap:round}
 .ring .bg{stroke:rgba(255,255,255,.1)}.ring .fg{stroke:var(--gold);stroke-dasharray:163.4;stroke-dashoffset:0}
@@ -209,6 +234,7 @@ table.st td{padding:10px 6px;text-align:center;border-top:1px solid rgba(255,255
 /* ---------- адаптив ---------- */
 @media (max-width:760px){
   header{padding:0 10px;height:54px;gap:6px}.screen{height:calc(100% - 54px)}
+  .accbtn .nm,.accbtn .rt,#bSound{display:none}.accbtn{padding:3px!important}body.inroom .logo{display:none}.hbtns{gap:5px}.iconbtn,.hbtns .btn{height:36px}.iconbtn{width:36px}
   .logo small,.logo span.t,.tablecode .w,#bInvite{display:none!important}.lg{display:none}.sm{display:inline}
   .konline small{display:none}.opps{padding-top:44px!important}
   .tablecode{padding:4px 6px;font-size:12px}.tablecode b{font-size:14px}
@@ -249,6 +275,8 @@ table.st td{padding:10px 6px;text-align:center;border-top:1px solid rgba(255,255
     <button class="btn iconbtn hidden" id="bInvite" title="Скопировать ссылку-приглашение">🔗</button>
     <button class="btn iconbtn hidden" id="bChat" title="Чат" style="position:relative">💬<i class="dot hidden" id="chatDot"></i></button>
     <button class="btn iconbtn" id="bSound" title="Звук">🔊</button>
+    <button class="btn iconbtn" id="bLb" title="Рейтинг игроков">🏆</button>
+    <button class="btn accbtn hidden" id="bAcc" title="Профиль"></button>
     <button class="btn hidden" id="bStats"><span class="lg">Статистика</span><span class="sm">📊</span></button>
     <button class="btn" id="bRules"><span class="lg">Как играть</span><span class="sm">❓</span></button>
     <button class="btn danger hidden" id="bEnd"><span class="lg">Закончить игру</span><span class="sm">⏹</span></button>
@@ -262,14 +290,24 @@ table.st td{padding:10px 6px;text-align:center;border-top:1px solid rgba(255,255
       <div class="suits-deco"><span class="b">♠</span><span class="r">♥</span><span class="r">♦</span><span class="b">♣</span></div>
       <h1>Дырка <em>онлайн</em></h1>
       <p class="sub" id="landSub">Карточная игра для 3–4 друзей. Создай стол, отправь ссылку — и играйте с телефона или компьютера. Свободные места займут боты.</p>
-      <label class="field"><span>Твоё имя</span><input id="inName" maxlength="16" placeholder="Например, Алекс" autocomplete="nickname"></label>
+      <div id="accBox" class="accbox hidden"></div>
+      <div id="authBox">
+        <div class="seg full" id="authTabs" style="margin-bottom:16px"><button data-m="guest" class="on">Гость</button><button data-m="login">Войти</button><button data-m="register">Регистрация</button></div>
+        <div id="authGuest"><label class="field"><span>Твоё имя</span><input id="inName" maxlength="16" placeholder="Например, Алекс" autocomplete="nickname"></label>
+          <div class="legend" style="margin:-4px 0 16px">Гостям рейтинг не начисляется. Создай аккаунт, чтобы копить рейтинг и поставить аватарку.</div></div>
+        <div id="authForm" class="hidden">
+          <label class="field"><span>Логин</span><input id="inUser" maxlength="16" placeholder="3–16 символов" autocomplete="username"></label>
+          <label class="field"><span>Пароль</span><input id="inPass" type="password" maxlength="100" placeholder="минимум 6 символов" autocomplete="current-password"></label>
+          <button class="btn big" id="bAuth" style="width:100%;margin-bottom:6px">Войти</button>
+        </div>
+      </div>
       <button class="btn gold big" id="bCreate" style="width:100%">Создать стол</button>
       <div class="or" id="orLine">или войти по коду</div>
       <div class="row" id="joinRow">
         <input id="inCode" inputmode="numeric" maxlength="8" placeholder="Код стола" style="background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--text);font:inherit;font-size:16px;outline:none">
         <button class="btn big" id="bJoin" style="flex:0 0 auto">Войти</button>
       </div>
-      <div id="landErr" style="color:var(--bad);margin-top:14px;font-weight:700;font-size:14px"></div>
+      <div id="landErr" class="errline"></div>
     </div>
   </div>
 </section>
@@ -371,18 +409,49 @@ async function copy(text, msg) {
 const link = () => location.origin + location.pathname + '?room=' + room;
 const send = (o) => ws && ws.readyState === 1 && ws.send(JSON.stringify(o));
 const initial = (n) => esc((n || '?').trim().charAt(0).toUpperCase());
+const PRESETS = [['🦊',28],['🐻',25],['🦁',42],['🐼',200],['🐯',32],['🦉',35],['🐸',130],['🐙',330],['🦄',290],['🐲',150],['🦅',210],['🐺',230]];
+function avHTML(p, size, extra = '') {
+  const a = p.avatar;
+  let cls = 'av', style = `--h:${+p.hue || 150}` + (size ? `;--s:${+size}px` : ''), inner;
+  if (a && a.k === 'upload') inner = `<img alt="" src="/api/avatar/${+a.u}?v=${+a.ver}">`;
+  else if (a && a.k === 'preset' && PRESETS[parseInt(String(a.v).slice(1), 10)]) {
+    const [e, h] = PRESETS[parseInt(String(a.v).slice(1), 10)];
+    cls += ' pr'; style += `;background:linear-gradient(135deg,hsl(${h} 55% 40%),hsl(${h} 60% 16%))`; inner = e;
+  } else inner = initial(p.name);
+  return `<div class="${cls}" style="${style}">${inner}${extra}</div>`;
+}
+function deltaHTML(p) {
+  if (p.delta == null || p.rating == null) return '';
+  if (!S.rated) return '<span class="delta zero">тренировка</span>';
+  const d = p.delta;
+  return `<span class="delta ${d > 0 ? 'up' : d < 0 ? 'down' : 'zero'}">${d > 0 ? '+' : ''}${d} ★</span>`;
+}
+let auth = null; // {token, user}
+async function apiCall(path, body) {
+  const o = { method: body ? 'POST' : 'GET', headers: { 'Content-Type': 'application/json' } };
+  if (auth) o.headers.Authorization = 'Bearer ' + auth.token;
+  if (body) o.body = JSON.stringify(body);
+  let r, j = {};
+  try { r = await fetch(path, o); j = await r.json(); } catch (e) { if (!r) throw new Error('Нет связи с сервером'); }
+  if (!r.ok) throw new Error(j.err || 'Ошибка');
+  return j;
+}
 
 /* ---------- сеть ---------- */
 function connect() {
   ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host);
-  ws.onopen = () => { retry = 0; $('#banner').classList.add('hidden'); send({ t: 'join', room, name: myName, token }); };
+  ws.onopen = () => { retry = 0; $('#banner').classList.add('hidden'); send({ t: 'join', room, name: myName, token, auth: auth ? auth.token : null }); };
   ws.onmessage = (e) => {
     const m = JSON.parse(e.data);
-    if (m.t === 'joined') { token = m.token; ls.set('dyrka_tok_' + room, token); }
+    if (m.t === 'joined') { if (m.token) { token = m.token; ls.set('dyrka_tok_' + room, token); } }
     else if (m.t === 'state') onState(m);
     else if (m.t === 'err') { toast(m.msg); if (m.fatal) { leaving = true; ws.close(); history.replaceState(null, '', location.pathname); showScreen('landing'); $('#landErr').textContent = m.msg; } }
   };
-  ws.onclose = () => { if (leaving) return; $('#banner').classList.remove('hidden'); setTimeout(connect, Math.min(5000, 400 * ++retry)); };
+  ws.onclose = (e) => {
+    if (leaving) return;
+    if (e.code === 4000) { leaving = true; $('#banner').textContent = 'Этот стол открыт в другой вкладке или на другом устройстве'; $('#banner').classList.remove('hidden'); return; }
+    $('#banner').classList.remove('hidden'); setTimeout(connect, Math.min(5000, 400 * ++retry));
+  };
 }
 setInterval(() => send({ t: 'ping' }), 20000);
 
@@ -399,6 +468,7 @@ function showScreen(n) {
   $('#scLobby').classList.toggle('hidden', n !== 'lobby');
   $('#scGame').classList.toggle('hidden', n !== 'game');
   const inRoom = n !== 'landing';
+  document.body.classList.toggle('inroom', inRoom);
   ['#tcode', '#bInvite', '#bChat'].forEach((s) => $(s).classList.toggle('hidden', !inRoom));
   $('#bStats').classList.toggle('hidden', n !== 'game');
   if (!inRoom) { $('#bEnd').classList.add('hidden'); $('#chat').classList.add('hidden'); chatOpen = false; }
@@ -421,7 +491,7 @@ function renderLobby() {
   $('#lobCode').textContent = S.code;
   $('#lobLink').value = link();
   const hum = S.seats;
-  let html = hum.map((p) => `<div class="pl"><div class="av" style="--h:${p.hue};--s:38px">${initial(p.name)}</div><span class="nm">${esc(p.name)}</span>${p.host ? '<span class="tag">хозяин</span>' : ''}</div>`).join('');
+  let html = hum.map((p) => `<div class="pl">${avHTML(p, 38)}<span class="nm">${esc(p.name)}</span>${p.rating != null ? `<span class="rt">★ ${p.rating}</span>` : ""}${p.host ? '<span class="tag">хозяин</span>' : ''}</div>`).join('');
   const slots = Math.max(S.numSeats, hum.length);
   for (let i = hum.length; i < slots; i++) html += `<div class="pl empty"><div class="av" style="--h:150;--s:38px;opacity:.5">🤖</div><span>Свободно — будет бот</span></div>`;
   $('#lobPlayers').innerHTML = html;
@@ -463,8 +533,8 @@ function renderGame() {
   const me = m.seats[m.you];
   const turn = myTurn();
   $('#me').innerHTML = `<div class="mepanel ${turn ? 'on-turn' : ''}">
-      <div class="av" style="--h:${me.hue};--s:46px">${initial(me.name)}</div>
-      <div><div class="nm">${esc(me.name)} ${roleIcon(me)}${turn ? '<span class="chip turn">Ходит</span>' : me.place ? `<span class="chip out">Вышел #${me.place}</span>` : ''}</div>
+      ${avHTML(me, 46)}
+      <div><div class="nm">${esc(me.name)} ${me.rating != null ? `<span class="rt">★ ${me.rating}</span>` : ''} ${roleIcon(me)}${turn ? '<span class="chip turn">Ходит</span>' : me.place ? `<span class="chip out">Вышел #${me.place}</span>` : ''}</div>
       <div class="sub">Твои карты · ${me.count}</div></div></div>
     <div class="timer ${turn ? 'on' : ''}" id="myTimer"><svg class="ring" viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" cx="30" cy="30" r="26"/></svg><span id="myTimerN">${turn ? Math.ceil(remaining() / 1000) : '·'}</span></div>`;
 
@@ -491,8 +561,8 @@ function oppHTML(i, act) {
   const cnt = Math.min(p.count, 12), mid = (cnt - 1) / 2;
   const fan = Array.from({ length: cnt }, (_, k) => `<div class="back" style="--r:${((k - mid) * 2.2).toFixed(1)}deg"></div>`).join('');
   return `<div class="opp ${onT ? 'on-turn' : ''} ${p.place ? 'out' : ''}" data-seat="${i}">${pop}
-    <div class="av" style="--h:${p.hue}">${initial(p.name)}<svg class="ring" viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" cx="30" cy="30" r="26"/></svg></div>
-    <div class="nm">${p.bot ? '🤖' : ''}${esc(p.name)} ${roleIcon(p)}</div>
+    ${avHTML(p, 0, '<svg class="ring" viewBox="0 0 60 60"><circle class="bg" cx="30" cy="30" r="26"/><circle class="fg" cx="30" cy="30" r="26"/></svg>')}
+    <div class="nm">${p.bot ? '🤖' : ''}${esc(p.name)} ${roleIcon(p)}</div>${p.rating != null ? `<div class="rt">★ ${p.rating}</div>` : ''}
     <div class="sub">Карт · ${p.count}</div>
     <div>${chips.join(' ')}</div>
     <div class="fan">${fan}</div></div>`;
@@ -516,7 +586,7 @@ function midHTML(act) {
     return cardHTML(c, fresh ? 'fly' : '', `--rot:${rot}deg;--i:${k};--fx:${dirs[0]}px;--fy:${dirs[1]}px`);
   }).join('');
   const hint = myTurn() ? (canBeatNow() ? `Перебей ${t.count > 1 ? 'тем же числом карт (<b>' + t.count + '</b>) ' : ''}или пасуй` : 'Нечем бить — пас') : `Ход: ${esc(S.seats[S.turn].name)}`;
-  return `<div class="lbl">На столе <span class="av" style="--h:${by.hue}">${initial(by.name)}</span> ${esc(by.name)}</div>
+  return `<div class="lbl">На столе ${avHTML(by, 28)} ${esc(by.name)}</div>
     <div class="combo" style="--tcw:${tcw}px">${cards}</div><div class="hint">${hint}</div>${say}`;
 }
 
@@ -621,7 +691,7 @@ function showResults() {
   const rows = order.map((i, k) => {
     const p = S.seats[i], boss = k === 0, hole = k === nn - 1;
     const tg = boss ? '👑 Босс' : hole ? '🕳️ Дырка' : '';
-    return `<div class="place ${boss ? 'boss' : hole ? 'hole' : ''}"><span class="n">${k + 1}</span><div class="av" style="--h:${p.hue};--s:34px">${initial(p.name)}</div><span class="nm">${esc(p.name)}${i === S.you ? ' (ты)' : ''}</span><span class="tg">${tg}</span></div>`;
+    return `<div class="place ${boss ? 'boss' : hole ? 'hole' : ''}"><span class="n">${k + 1}</span>${avHTML(p, 34)}<span class="nm">${esc(p.name)}${i === S.you ? ' (ты)' : ''}${p.rating != null ? ` <span class="rt">★ ${p.rating}</span>` : ''}</span><span class="tg">${deltaHTML(p)} ${tg}</span></div>`;
   }).join('');
   const boss = S.seats[order[0]], hole = S.seats[order[nn - 1]];
   const youBoss = order[0] === S.you, youHole = order[nn - 1] === S.you;
@@ -681,20 +751,133 @@ $('#bSound').textContent = soundOn ? '🔊' : '🔈';
 document.querySelectorAll('#seg button').forEach((b) => (b.onclick = () => send({ t: 'config', seats: +b.dataset.n })));
 $('#bStart').onclick = () => send({ t: 'start' });
 
+/* ---------- аккаунт ---------- */
+let tab = 'guest';
+function setTab(m) {
+  tab = m;
+  document.querySelectorAll('#authTabs button').forEach((b) => b.classList.toggle('on', b.dataset.m === m));
+  $('#authGuest').classList.toggle('hidden', m !== 'guest');
+  $('#authForm').classList.toggle('hidden', m === 'guest');
+  $('#bAuth').textContent = m === 'login' ? 'Войти' : 'Создать аккаунт';
+  $('#inPass').autocomplete = m === 'login' ? 'current-password' : 'new-password';
+  $('#landErr').textContent = '';
+}
+document.querySelectorAll('#authTabs button').forEach((b) => (b.onclick = () => setTab(b.dataset.m)));
+function renderAuth() {
+  const li = !!auth;
+  $('#authBox').classList.toggle('hidden', li);
+  $('#accBox').classList.toggle('hidden', !li);
+  $('#bAcc').classList.toggle('hidden', !li);
+  if (!li) return;
+  const u = auth.user, pr = { name: u.username, hue: 150, avatar: u.avatar };
+  $('#bAcc').innerHTML = `${avHTML(pr, 34)}<span class="nm">${esc(u.username)}</span><span class="rt">★ ${u.rating}</span>`;
+  $('#accBox').innerHTML = `${avHTML(pr, 56)}<div><div class="nm">${esc(u.username)}</div><div class="sub2">★ ${u.rating} · конов ${u.games}</div></div><div class="btns"><button class="btn" id="bProf">Профиль</button></div>`;
+  $('#bProf').onclick = openProfile;
+}
+function setAuth(token, user) { auth = { token, user }; ls.set('dyrka_auth', token); renderAuth(); }
+async function refreshMe() {
+  if (!auth) return;
+  try { const r = await apiCall('/api/me'); auth.user = r.user; renderAuth(); } catch (e) {}
+}
+$('#bAuth').onclick = async () => {
+  const username = $('#inUser').value.trim(), password = $('#inPass').value;
+  if (!username || !password) { $('#landErr').textContent = 'Введи логин и пароль'; return; }
+  $('#bAuth').disabled = true; $('#landErr').textContent = '';
+  try {
+    const r = await apiCall(tab === 'login' ? '/api/login' : '/api/register', { username, password });
+    $('#inPass').value = '';
+    setAuth(r.token, r.user);
+    toast(tab === 'login' ? 'Добро пожаловать, ' + r.user.username : 'Аккаунт создан!');
+  } catch (e) { $('#landErr').textContent = e.message; }
+  $('#bAuth').disabled = false;
+};
+$('#inPass').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#bAuth').click(); });
+$('#inUser').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#inPass').focus(); });
+
+function toAvatar(file) {
+  return new Promise((res, rej) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const N = 128, c = document.createElement('canvas'); c.width = c.height = N;
+      const m = Math.min(img.width, img.height);
+      c.getContext('2d').drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, N, N);
+      URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = () => rej(new Error('Не удалось прочитать картинку'));
+    img.src = url;
+  });
+}
+async function saveAvatar(body) {
+  try {
+    const r = await apiCall('/api/avatar', body);
+    auth.user = r.user; renderAuth(); send({ t: 'profile' });
+    openProfile();
+  } catch (e) { const el = $('#profErr'); if (el) el.textContent = e.message; }
+}
+async function openProfile() {
+  if (!auth) return;
+  await refreshMe();
+  const u = auth.user, pr = { name: u.username, hue: 150, avatar: u.avatar };
+  const cur = u.avatar && u.avatar.k === 'preset' ? u.avatar.v : '';
+  openModal(`<div class="prof">${avHTML(pr, 84)}<div><div class="nm">${esc(u.username)}</div><div class="rt" style="font-size:15px;margin-top:6px">★ ${u.rating}</div></div></div>
+    <div class="stats4"><div><b>${u.rating}</b><span>Рейтинг</span></div><div><b>${u.games}</b><span>Конов</span></div><div><b>${u.boss}</b><span>Боссом</span></div><div><b>${u.dyrka}</b><span>Дыркой</span></div></div>
+    <div class="legend">Выбери аватар</div>
+    <div class="avgrid">${PRESETS.map((_, i) => `<button data-p="p${i}" class="${cur === 'p' + i ? 'on' : ''}">${avHTML({ name: '', hue: 150, avatar: { k: 'preset', v: 'p' + i } }, 0)}</button>`).join('')}</div>
+    <div class="row" style="margin-bottom:6px"><button class="btn" id="bUp">Загрузить своё фото</button><button class="btn danger" id="bOut">Выйти из аккаунта</button></div>
+    <div class="errline" id="profErr"></div>`);
+  document.querySelectorAll('.avgrid button').forEach((b) => (b.onclick = () => saveAvatar({ kind: 'preset', value: b.dataset.p })));
+  $('#bUp').onclick = () => {
+    const f = document.createElement('input'); f.type = 'file'; f.accept = 'image/*';
+    f.onchange = async () => {
+      if (!f.files[0]) return;
+      try { saveAvatar({ kind: 'upload', data: await toAvatar(f.files[0]) }); } catch (e) { $('#profErr').textContent = e.message; }
+    };
+    f.click();
+  };
+  $('#bOut').onclick = () => { ls.set('dyrka_auth', ''); location.href = location.pathname; };
+}
+$('#bAcc').onclick = openProfile;
+$('#bLb').onclick = async () => {
+  openModal('<h2>Рейтинг игроков</h2><div id="lbBody" class="legend">Загрузка…</div><div class="legend" style="margin:12px 0 16px">Рейтинг меняется после каждого кона, если за столом минимум двое людей. Старт — 1000. Боты и гости рейтинг не получают.</div>');
+  try {
+    const r = await apiCall('/api/leaderboard');
+    const el = $('#lbBody'); if (!el) return;
+    el.className = '';
+    el.innerHTML = r.top.length ? r.top.map((u, i) => `<div class="lbrow ${auth && auth.user.id === u.id ? 'me' : ''}"><span class="n">${i + 1}</span>${avHTML({ name: u.username, hue: 150, avatar: u.avatar }, 38)}<div><div class="nm">${esc(u.username)}</div><div class="meta">конов ${u.games} · 👑 ${u.boss} · 🕳️ ${u.dyrka}</div></div><span class="big">${u.rating}</span></div>`).join('') : '<div class="legend">Пока никто не сыграл рейтинговых партий. Создай аккаунт и стань первым!</div>';
+  } catch (e) { const el = $('#lbBody'); if (el) el.textContent = e.message; }
+};
+
 /* ---------- вход ---------- */
 const urlRoom = (new URLSearchParams(location.search).get('room') || '').replace(/\D/g, '');
 $('#inName').value = ls.get('dyrka_name') || '';
-function needName() { const v = $('#inName').value.trim(); if (!v) { $('#landErr').textContent = 'Введи имя, чтобы сесть за стол'; $('#inName').focus(); return null; } return v; }
+function needName() {
+  if (auth) return auth.user.username;
+  if (tab !== 'guest') { $('#landErr').textContent = 'Сначала войди в аккаунт — или выбери «Гость»'; return null; }
+  const v = $('#inName').value.trim();
+  if (!v) { $('#landErr').textContent = 'Введи имя, чтобы сесть за стол'; $('#inName').focus(); return null; }
+  return v;
+}
 $('#bCreate').onclick = () => { const nm = needName(); if (!nm) return; enterRoom(String(Math.floor(100000 + Math.random() * 900000)), nm); };
 $('#bJoin').onclick = () => { const nm = needName(); if (!nm) return; const c = $('#inCode').value.replace(/\D/g, ''); if (c.length < 4) { $('#landErr').textContent = 'Введи код стола'; return; } enterRoom(c, nm); };
-$('#inName').addEventListener('keydown', (e) => { if (e.key === 'Enter') (urlRoom ? $('#bCreate') : $('#bCreate')).click(); });
+$('#inName').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#bCreate').click(); });
 if (urlRoom) {
   // зашли по ссылке-приглашению
-  $('#landSub').textContent = 'Тебя ждут за столом ' + urlRoom + '. Введи имя — и садись играть.';
+  $('#landSub').textContent = 'Тебя ждут за столом ' + urlRoom + '. Войди или выбери «Гость» — и садись играть.';
   $('#bCreate').textContent = 'Сесть за стол'; $('#orLine').classList.add('hidden'); $('#joinRow').classList.add('hidden');
   $('#bCreate').onclick = () => { const nm = needName(); if (nm) enterRoom(urlRoom, nm); };
-  if (ls.get('dyrka_name') && ls.get('dyrka_tok_' + urlRoom)) enterRoom(urlRoom, ls.get('dyrka_name'));
 }
+(async () => {
+  const t = ls.get('dyrka_auth');
+  if (t) {
+    try {
+      const r = await fetch('/api/me', { headers: { Authorization: 'Bearer ' + t } });
+      if (r.ok) auth = { token: t, user: (await r.json()).user };
+      else if (r.status === 401) ls.set('dyrka_auth', '');
+    } catch (e) {}
+  }
+  renderAuth();
+  if (urlRoom && (auth || (ls.get('dyrka_name') && ls.get('dyrka_tok_' + urlRoom)))) enterRoom(urlRoom, auth ? auth.user.username : ls.get('dyrka_name'));
+})();
 showScreen('landing');
 addEventListener('resize', () => { if (S && S.phase !== 'lobby') { document.documentElement.style.setProperty('--cw', cardW() + 'px'); renderHand(false); } });
 })();

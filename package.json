@@ -1,6 +1,6 @@
 {
   "name": "dyrka-online",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Дырка онлайн — карточная игра для 3–4 друзей",
   "main": "server.js",
   "scripts": {
@@ -10,6 +10,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "ws": "^8.18.0"
+    "ws": "^8.18.0",
+    "pg": "^8.13.0"
   }
 }

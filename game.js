@@ -39,6 +39,8 @@ class Room {
     this.chat = [];
     this.touched = Date.now();
     this.timers = {};
+    this.onKonEnd = null;
+    this.onProfile = null;
   }
 
   // ---------- вспомогательное ----------
@@ -96,7 +98,7 @@ class Room {
   }
 
   // ---------- вход / выход ----------
-  join(token, name, ws) {
+  join(token, name, ws, info = {}) {
     this.touched = Date.now();
     const i = this.idxOf(token);
     if (i >= 0) {
@@ -104,10 +106,11 @@ class Room {
       if (s.ws && s.ws !== ws) { try { s.ws.close(4000, 'replaced'); } catch (e) {} }
       s.ws = ws;
       s.name = name || s.name;
+      Object.assign(s, { uid: info.uid || null, avatar: info.avatar || null, rating: info.rating == null ? null : info.rating });
       this.afterConnChange();
       return { ok: true };
     }
-    const mk = () => ({ token, name, bot: false, ws, hand: [], hue: Math.floor(rnd(0, 360)), place: null, stats: { boss: 0, dyrka: 0, kons: 0 } });
+    const mk = () => ({ token, name, bot: false, ws, hand: [], hue: Math.floor(rnd(0, 360)), place: null, uid: info.uid || null, avatar: info.avatar || null, rating: info.rating == null ? null : info.rating, lastDelta: null, stats: { boss: 0, dyrka: 0, kons: 0 } });
     if (this.phase === 'lobby') {
       if (this.seats.filter((s) => !s.bot).length >= 4) return { err: 'Стол заполнен (максимум 4 человека)' };
       this.seats.push(mk());
@@ -149,6 +152,9 @@ class Room {
     const i = this.idxOf(token);
     if (i < 0) return;
     switch (m.t) {
+      case 'profile':
+        if (this.onProfile) this.onProfile(this, i);
+        break;
       case 'chat': {
         const text = String(m.text || '').trim().slice(0, 200);
         if (!text) return;
@@ -187,7 +193,7 @@ class Room {
     this.numSeats = n;
     let b = 1;
     while (this.seats.length < n) {
-      this.seats.push({ token: 'bot' + b, name: 'Бот ' + b, bot: true, ws: null, hand: [], hue: Math.floor(rnd(0, 360)), place: null, stats: { boss: 0, dyrka: 0, kons: 0 } });
+      this.seats.push({ token: 'bot' + b, name: 'Бот ' + b, bot: true, ws: null, hand: [], hue: Math.floor(rnd(0, 360)), place: null, uid: null, avatar: null, rating: null, lastDelta: null, stats: { boss: 0, dyrka: 0, kons: 0 } });
       b++;
     }
     shuffle(this.seats);
@@ -217,7 +223,7 @@ class Room {
     this.clearTimers();
     const n = this.seats.length;
     const deck = shuffle([...Array(32).keys()]);
-    this.seats.forEach((s) => { s.hand = []; s.place = null; });
+    this.seats.forEach((s) => { s.hand = []; s.place = null; s.lastDelta = null; });
     deck.forEach((c, i) => this.seats[i % n].hand.push(c));
     this.kon++;
     this.table = null;
@@ -353,6 +359,12 @@ class Room {
     this.note(`Кон ${this.kon} окончен. Дырка — ${this.seats[this.finish[n - 1]].name}`, this.finish[n - 1], 'end');
     this.scheduleNext();
     this.changed();
+    if (this.onKonEnd) {
+      const kon = this.kon;
+      Promise.resolve(this.onKonEnd(this))
+        .then(() => { if (this.kon === kon) this.changed(); })
+        .catch((e) => console.error('onKonEnd', e && e.message));
+    }
   }
 
   scheduleNext() {
@@ -383,6 +395,7 @@ class Room {
       msg: this.msg,
       lastAction: this.lastAction,
       exchange: this.exchange,
+      rated: !!this.lastRated,
       finish: this.finish,
       chat: this.chat,
       seats: this.seats.map((s, k) => ({
@@ -395,6 +408,10 @@ class Room {
         host: k === host,
         role: this.roles ? (this.roles.boss === k ? 'boss' : this.roles.dyrka === k ? 'dyrka' : null) : null,
         stats: s.stats,
+        uid: s.uid || null,
+        avatar: s.avatar || null,
+        rating: s.rating == null ? null : s.rating,
+        delta: s.lastDelta == null ? null : s.lastDelta,
       })),
     };
   }
