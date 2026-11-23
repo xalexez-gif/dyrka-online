@@ -4,6 +4,7 @@
 const TURN_MS = 15000;
 const REACTIONS = ['🍺', '🍀', '👏', '😂', '😮', '🔥', '😤', '🥃', '🍑'];
 const BETWEEN_MS = 9000;
+const BOT_NAMES = ['Алессандро', 'Бармен', 'Вито', 'Массимо', 'Савелла'];
 const EXCH_MS = 4800; // пауза на анимацию обмена картами: ходы и таймер начинаются после неё
 const AD = 2 * 8 + 7; // туз бубен
 const rankOf = (id) => id % 8;
@@ -209,8 +210,10 @@ class Room {
     const n = Math.max(this.numSeats, humans.length);
     this.numSeats = n;
     let b = 1;
+    const taken = new Set(humans.map((h) => h.name.trim().toLowerCase()));
+    const pool = shuffle(BOT_NAMES.filter((x) => !taken.has(x.toLowerCase())));
     while (this.seats.length < n) {
-      this.seats.push({ token: 'bot' + b, name: 'Бот ' + b, bot: true, ws: null, hand: [], hue: Math.floor(rnd(0, 360)), place: null, uid: null, avatar: null, rating: null, lastDelta: null, stats: { boss: 0, dyrka: 0, kons: 0 } });
+      this.seats.push({ token: 'bot' + b, name: pool.shift() || 'Бот ' + b, bot: true, ws: null, hand: [], hue: Math.floor(rnd(0, 360)), place: null, uid: null, avatar: null, rating: null, lastDelta: null, stats: { boss: 0, dyrka: 0, kons: 0 } });
       b++;
     }
     shuffle(this.seats);
