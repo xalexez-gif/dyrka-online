@@ -175,6 +175,17 @@ header{height:60px;display:flex;align-items:center;gap:10px;padding:0 16px;borde
 .reactpop button{width:46px;height:46px;border-radius:12px;border:1px solid rgba(230,189,94,.25);background:rgba(0,0,0,.28);font-size:24px;line-height:1;display:grid;place-items:center;transition:.12s;font-family:system-ui,'Apple Color Emoji','Segoe UI Emoji',sans-serif}
 .reactpop button:hover{background:rgba(230,189,94,.2);transform:translateY(-2px) scale(1.06)}
 .reactpop button.txt{font-size:15px;font-weight:800;color:var(--gold);letter-spacing:.04em;font-family:var(--sans)}
+#xch{position:fixed;inset:0;pointer-events:none;z-index:72;overflow:hidden}
+.xban{position:absolute;left:50%;top:42%;transform:translateX(-50%);max-width:calc(100% - 24px);text-align:center;padding:12px 22px;border-radius:16px;background:linear-gradient(180deg,#4a2c18,#26150b);border:2px solid #9a6e26;box-shadow:0 18px 44px rgba(0,0,0,.65),inset 0 0 0 3px rgba(0,0,0,.3);animation:rise .35s cubic-bezier(.2,.9,.3,1.1) both;transition:opacity .4s,transform .4s}
+.xban.out{opacity:0;transform:translateX(-50%) translateY(-10px)}
+.xban .t{font-family:var(--display);font-size:22px;color:var(--gold);text-shadow:0 2px 0 rgba(0,0,0,.6)}
+.xban .s{display:flex;gap:6px 18px;justify-content:center;flex-wrap:wrap;margin-top:6px;font-size:13px;font-weight:600;color:var(--text)}
+.xban .s b{color:var(--gold)}
+.xcard{position:absolute;left:0;top:0;will-change:transform,opacity;filter:drop-shadow(0 12px 14px rgba(0,0,0,.5))}
+.xtag{position:absolute;transform:translate(-50%,-50%);background:linear-gradient(180deg,#f0cf7d,#b98a35);color:#2a1705;font-weight:800;font-size:12px;letter-spacing:.06em;padding:5px 12px;border-radius:99px;border:1px solid #f6dc97;white-space:nowrap;box-shadow:0 6px 16px rgba(0,0,0,.5);animation:pop 1.5s ease both}
+.hand .card.xhide{opacity:0;pointer-events:none}
+.hand .card.xnew{box-shadow:0 0 0 2px var(--gold),0 0 24px rgba(230,189,94,.85);animation:xnew 1.4s ease-out}
+@keyframes xnew{0%{transform:translateY(-26px) scale(1.12)}40%{transform:translateY(-14px) scale(1.05)}100%{transform:none}}
 #reacts{position:fixed;inset:0;pointer-events:none;z-index:75;overflow:hidden}
 .rfly{display:flex;flex-direction:column;align-items:center;position:absolute;transform:translate(-50%,-50%);font-size:44px;line-height:1;animation:rfly 2.3s cubic-bezier(.2,.7,.3,1) both;filter:drop-shadow(0 6px 8px rgba(0,0,0,.5));font-family:system-ui,'Apple Color Emoji','Segoe UI Emoji',sans-serif;text-align:center}
 .rfly small{display:block;order:-1;margin:0 0 4px;font-family:var(--sans);font-size:11px;font-weight:800;letter-spacing:.06em;color:#fff3d6;text-shadow:0 1px 3px rgba(0,0,0,.9)}
@@ -293,6 +304,7 @@ table.st td{padding:10px 6px;text-align:center;border-top:1px solid rgba(255,255
 <div id="banner" class="hidden">Связь потеряна — переподключаюсь…</div>
 <div id="toast"></div>
 <div id="reacts"></div>
+<div id="xch"></div>
 
 <header>
   <div class="logo"><svg viewBox="0 0 100 100"><use href="#clover"/></svg><span class="t">ДЫРКА</span><small>ПАБ</small></div>
@@ -305,6 +317,7 @@ table.st td{padding:10px 6px;text-align:center;border-top:1px solid rgba(255,255
     <button class="btn accbtn hidden" id="bAcc" title="Профиль"></button>
     <button class="btn hidden" id="bStats"><span class="lg">Статистика</span><span class="sm">📊</span></button>
     <button class="btn" id="bRules"><span class="lg">Как играть</span><span class="sm">❓</span></button>
+    <button class="btn hidden" id="bExit" title="Выйти в главное меню"><span class="lg">В меню</span><span class="sm">🚪</span></button>
     <button class="btn danger hidden" id="bEnd"><span class="lg">Закончить игру</span><span class="sm">⏹</span></button>
   </div>
 </header>
@@ -516,7 +529,7 @@ function showScreen(n) {
   $('#scGame').classList.toggle('hidden', n !== 'game');
   const inRoom = n !== 'landing';
   document.body.classList.toggle('inroom', inRoom);
-  ['#tcode', '#bInvite', '#bChat'].forEach((s) => $(s).classList.toggle('hidden', !inRoom));
+  ['#tcode', '#bInvite', '#bChat', '#bExit'].forEach((s) => $(s).classList.toggle('hidden', !inRoom));
   $('#bStats').classList.toggle('hidden', n !== 'game');
   if (!inRoom) { $('#bEnd').classList.add('hidden'); $('#chat').classList.add('hidden'); chatOpen = false; }
 }
@@ -526,16 +539,82 @@ function onState(m) {
   if (first) lastSeq = m.lastAction ? m.lastAction.seq : -1;
   S = m;
   offset = m.serverNow - Date.now();
+  const xplay = xchPrepare(m, first);
   $('#tcodeN').textContent = m.code;
   $('#bEnd').classList.toggle('hidden', !(m.isHost && m.phase !== 'lobby'));
   if (m.phase === 'lobby') { showScreen('lobby'); renderLobby(); hideResults(); }
   else { showScreen('game'); renderGame(); }
   renderChat();
+  if (xplay) playExchange(m.exchange);
   if (m.react) {
     if (first) lastReactSeq = m.react.seq;
     else if (m.react.seq !== lastReactSeq) { lastReactSeq = m.react.seq; if (m.phase !== 'lobby') showReaction(m.react.seat, m.react.e); }
   }
 }
+
+/* ---------- обмен картами босс ⇄ дырка ---------- */
+let lastXchKon = -1, xchHide = new Set(), xchNew = new Set(), xchTimers = [];
+function xchPrepare(m, first) {
+  const ex = m.exchange;
+  if (!ex || m.phase !== 'play') { if (!ex) lastXchKon = -1; return false; }
+  const fresh = m.kon !== lastXchKon;
+  lastXchKon = m.kon;
+  if (!fresh) return false;
+  // при входе посреди паузы тоже показываем; при обычном обновлении страницы после паузы — нет
+  if (first && !(m.holdUntil && Date.now() + offset < m.holdUntil)) return false;
+  xchTimers.forEach(clearTimeout); xchTimers = []; xchHide = new Set(); xchNew = new Set();
+  if (m.you === ex.dyrka) ex.got.forEach((c) => xchHide.add(c));
+  else if (m.you === ex.boss) ex.gave.forEach((c) => xchHide.add(c));
+  return true;
+}
+function seatCenter(seat) {
+  const a = seat === S.you ? document.querySelector('.mepanel .av') : document.querySelector('.opp[data-seat="' + seat + '"] .av');
+  if (!a) return { x: innerWidth / 2, y: innerHeight / 2 };
+  const r = a.getBoundingClientRect();
+  return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+}
+function xchFly(ids, from, to, label, onArrive) {
+  const layer = $('#xch'), cw = Math.round(Math.max(48, cardW() * 0.9)), A = seatCenter(from), B = seatCenter(to);
+  const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2 - 24;
+  const els = ids.map((id, k) => {
+    const d = document.createElement('div');
+    d.className = 'xcard';
+    d.style.setProperty('--cw', cw + 'px');
+    d.innerHTML = cardHTML(id);
+    layer.appendChild(d);
+    const dx = (k - (ids.length - 1) / 2) * cw * 0.62, rot = (k - (ids.length - 1) / 2) * 14;
+    const at = (p, sc, rt) => `translate(${p.x + dx * sc}px,${p.y}px) translate(-50%,-50%) scale(${sc}) rotate(${rt}deg)`;
+    d.animate([
+      { transform: at(A, .45, rot - 20), opacity: 0 },
+      { transform: at(A, 1, rot), opacity: 1, offset: .18 },
+      { transform: at({ x: mx, y: my }, 1.12, rot * 0.5), opacity: 1, offset: .55 },
+      { transform: at(B, .45, rot + 20), opacity: 0.1 }
+    ], { duration: 1350, easing: 'cubic-bezier(.45,.05,.3,1)', fill: 'forwards' });
+    return d;
+  });
+  const tag = document.createElement('div');
+  tag.className = 'xtag';
+  tag.style.left = mx + 'px'; tag.style.top = (my + cw * 0.95) + 'px';
+  tag.textContent = label;
+  layer.appendChild(tag);
+  beep(520, .07, .035);
+  xchTimers.push(setTimeout(() => { beep(760, .09, .04); onArrive && onArrive(); }, 1250));
+  xchTimers.push(setTimeout(() => { els.forEach((e) => e.remove()); tag.remove(); }, 1500));
+}
+function playExchange(ex) {
+  const layer = $('#xch'); layer.innerHTML = '';
+  const D = S.seats[ex.dyrka], B = S.seats[ex.boss];
+  const ban = document.createElement('div');
+  ban.className = 'xban';
+  ban.innerHTML = `<div class="t">Обмен картами</div><div class="s"><span>🕳️ <b>${esc(D.name)}</b> отдаёт две старшие</span><span>👑 <b>${esc(B.name)}</b> отдаёт две младшие</span></div>`;
+  layer.appendChild(ban);
+  const arrive = (ids) => () => { ids.forEach((c) => { xchHide.delete(c); xchNew.add(c); }); renderHand(false); };
+  xchTimers.push(setTimeout(() => xchFly(ex.gave, ex.dyrka, ex.boss, 'две старшие → боссу', S.you === ex.boss ? arrive(ex.gave) : null), 600));
+  xchTimers.push(setTimeout(() => xchFly(ex.got, ex.boss, ex.dyrka, 'две младшие → дырке', S.you === ex.dyrka ? arrive(ex.got) : null), 2250));
+  xchTimers.push(setTimeout(() => { ban.classList.add('out'); }, 4000));
+  xchTimers.push(setTimeout(() => { layer.innerHTML = ''; xchNew = new Set(); xchHide = new Set(); if (S && S.phase === 'play') { renderCtrls(); renderHand(false); } renderGameSoft(); }, Math.max(4300, (S.holdUntil - (Date.now() + offset)) - 150)));
+}
+function renderGameSoft() { if (S && S.phase === 'play') renderGame(); }
 
 /* ---------- реакции ---------- */
 const REACTS = ['🍺', '🍀', '👏', '😂', '😮', '🔥', '😤', '🥃', '🍑'];
@@ -584,7 +663,8 @@ function renderLobby() {
 /* ---------- игра ---------- */
 const n = () => S.seats.length;
 const rel = (i) => (i - S.you + n()) % n();
-const myTurn = () => S.phase === 'play' && S.turn === S.you;
+const holding = () => !!(S && S.holdUntil && Date.now() + offset < S.holdUntil);
+const myTurn = () => S.phase === 'play' && S.turn === S.you && !holding();
 const remaining = () => Math.max(0, S.deadline - (Date.now() + offset));
 function cardW() { return Math.round(Math.max(48, Math.min(84, innerWidth * 0.165, (innerHeight - 500) / 2.75))); }
 
@@ -709,7 +789,7 @@ function renderHand(deal) {
     const r = rank(c);
     let dim = false;
     if (turn && t) dim = !(r > t.rank && g[r].length >= t.count);
-    const cls = `${sel.has(c) ? 'sel' : ''} ${dim ? 'dim' : ''} ${deal ? 'deal' : ''}`;
+    const cls = `${sel.has(c) ? 'sel' : ''} ${dim ? 'dim' : ''} ${deal ? 'deal' : ''} ${xchHide.has(c) ? 'xhide' : ''} ${xchNew.has(c) ? 'xnew' : ''}`;
     return cardHTML(c, cls, `--x:${(left0 + i * step).toFixed(1)}px;--z:${i + 1};--i:${i}`);
   }).join('');
   el.querySelectorAll('.card').forEach((node) => node.addEventListener('click', () => onCard(+node.dataset.id, node)));
@@ -753,7 +833,7 @@ function tick() {
     if (mt && myTurn()) {
       mt.classList.toggle('urgent', urgent);
       mt.querySelector('.fg').style.strokeDashoffset = off;
-      const s = Math.ceil(rem / 1000), nEl = $('#myTimerN');
+      const s = Math.min(Math.ceil(rem / 1000), Math.round(S.turnMs / 1000)), nEl = $('#myTimerN');
       if (nEl && nEl.textContent !== String(s)) { nEl.textContent = s; if (s <= 3 && s > 0) beep(900, .05, .04); }
     }
   }
@@ -823,6 +903,20 @@ $('#bStats').onclick = () => {
   if (!S) return;
   const rows = S.seats.map((p, i) => `<tr><td>${p.bot ? '🤖 ' : ''}${esc(p.name)}${i === S.you ? ' (ты)' : ''}</td><td>${p.stats.boss}</td><td>${p.stats.dyrka}</td><td>${p.stats.kons}</td></tr>`).join('');
   openModal(`<h2>Статистика</h2><table class="st"><tr><th>Игрок</th><th>👑 Боссом</th><th>🕳️ Дыркой</th><th>Конов</th></tr>${rows}</table>`);
+};
+function leaveRoom() {
+  leaving = true;
+  try { ws && ws.close(); } catch (e) {}
+  ws = null; S = null; room = null; token = null; sel.clear();
+  xchTimers.forEach(clearTimeout); xchTimers = []; xchHide = new Set(); xchNew = new Set();
+  $('#xch').innerHTML = ''; $('#reacts').innerHTML = ''; $('#reactPop').classList.add('hidden');
+  hideResults(); $('#banner').classList.add('hidden'); $('#modal').classList.add('hidden');
+  history.replaceState(null, '', location.pathname);
+  showScreen('landing'); $('#landErr').textContent = '';
+}
+$('#bExit').onclick = () => {
+  if (S && S.phase !== 'lobby' && !confirm('Выйти в главное меню? Пока вас нет, за вас будет ходить бот. Вернуться можно по ссылке на стол.')) return;
+  leaveRoom();
 };
 $('#bEnd').onclick = () => { if (confirm('Закончить игру и вернуться в лобби? Статистика обнулится.')) send({ t: 'end' }); };
 $('#bInvite').onclick = $('#tcode').onclick = $('#bCopy').onclick = () => copy(link(), 'Ссылка на стол скопирована');

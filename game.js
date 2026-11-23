@@ -4,6 +4,7 @@
 const TURN_MS = 15000;
 const REACTIONS = ['🍺', '🍀', '👏', '😂', '😮', '🔥', '😤', '🥃', '🍑'];
 const BETWEEN_MS = 9000;
+const EXCH_MS = 4800; // пауза на анимацию обмена картами: ходы и таймер начинаются после неё
 const AD = 2 * 8 + 7; // туз бубен
 const rankOf = (id) => id % 8;
 const suitOf = (id) => id >> 3;
@@ -39,6 +40,7 @@ class Room {
     this.nextAt = 0;
     this.chat = [];
     this.reaction = null;
+    this.holdUntil = 0;
     this.reactSeq = 0;
     this.touched = Date.now();
     this.timers = {};
@@ -192,9 +194,11 @@ class Room {
         if (i === this.hostIdx() && this.phase !== 'lobby') this.toLobby();
         break;
       case 'play':
+        if (Date.now() < this.holdUntil) return;
         this.doPlay(i, Array.isArray(m.cards) ? m.cards.map(Number) : []);
         break;
       case 'pass':
+        if (Date.now() < this.holdUntil) return;
         if (this.phase === 'play' && this.turn === i && this.table) this.doPass(i, false);
         break;
     }
@@ -225,6 +229,7 @@ class Room {
     this.turn = -1;
     this.finish = [];
     this.exchange = null;
+    this.holdUntil = 0;
     this.roles = null;
     this.prevKey = null;
     this.msg = 'Игра окончена. Можно начать заново';
@@ -241,6 +246,7 @@ class Room {
     this.kon++;
     this.table = null;
     this.exchange = null;
+    this.holdUntil = 0;
     this.roles = null;
     const same = this.prevKey === this.key() && this.finish.length === n;
     let first;
@@ -254,6 +260,7 @@ class Room {
       this.seats[dyrka].hand = dh.filter((c) => !gave.includes(c)).concat(got);
       this.seats[boss].hand = bh.filter((c) => !got.includes(c)).concat(gave);
       this.exchange = { boss, dyrka, gave, got };
+      this.holdUntil = Date.now() + EXCH_MS;
       this.roles = { boss, dyrka };
       first = dyrka;
       this.note(`Кон ${this.kon}. ${this.seats[dyrka].name} отдаёт две старшие и ходит первым`, first, 'deal');
@@ -268,7 +275,7 @@ class Room {
 
   setTurn(i) {
     this.turn = i;
-    this.deadline = Date.now() + TURN_MS;
+    this.deadline = Date.now() + TURN_MS + Math.max(0, this.holdUntil - Date.now());
     this.schedule();
     this.changed();
   }
@@ -282,7 +289,7 @@ class Room {
     if (this.table && !this.canBeat(s.hand)) {
       this.setT('act', () => this.doPass(i, 'auto'), 1100);
     } else if (!live) {
-      this.setT('act', () => this.botMove(i), rnd(900, 1700));
+      this.setT('act', () => this.botMove(i), rnd(900, 1700) + Math.max(0, this.holdUntil - Date.now()));
     }
     this.setT('turn', () => this.timeout(i), Math.max(0, this.deadline - Date.now()) + 250);
   }
@@ -408,6 +415,7 @@ class Room {
       msg: this.msg,
       lastAction: this.lastAction,
       exchange: this.exchange,
+      holdUntil: this.holdUntil,
       rated: !!this.lastRated,
       finish: this.finish,
       chat: this.chat,
@@ -432,4 +440,4 @@ class Room {
 }
 
 const REACTIONS_LIST = REACTIONS;
-module.exports = { REACTIONS: REACTIONS_LIST, Room, TURN_MS, BETWEEN_MS, rankOf, suitOf };
+module.exports = { EXCH_MS, REACTIONS: REACTIONS_LIST, Room, TURN_MS, BETWEEN_MS, rankOf, suitOf };
