@@ -2,6 +2,7 @@
 // Логика игры «Дырка». Карта = число 0..31: ранг = id % 8 (7,8,9,10,J,Q,K,A), масть = id >> 3 (♠ ♥ ♦ ♣).
 
 const TURN_MS = 15000;
+const REACTIONS = ['🍺', '🍀', '👏', '😂', '😮', '🔥', '😤', '🥃', 'GG'];
 const BETWEEN_MS = 9000;
 const AD = 2 * 8 + 7; // туз бубен
 const rankOf = (id) => id % 8;
@@ -37,6 +38,8 @@ class Room {
     this.prevKey = null;
     this.nextAt = 0;
     this.chat = [];
+    this.reaction = null;
+    this.reactSeq = 0;
     this.touched = Date.now();
     this.timers = {};
     this.onKonEnd = null;
@@ -155,6 +158,16 @@ class Room {
       case 'profile':
         if (this.onProfile) this.onProfile(this, i);
         break;
+      case 'react': {
+        const e = String(m.e || '');
+        if (!REACTIONS.includes(e)) return;
+        const now = Date.now(), seat = this.seats[i];
+        if (now - (seat.reactAt || 0) < 900) return;
+        seat.reactAt = now;
+        this.reaction = { seq: ++this.reactSeq, seat: i, e };
+        this.changed();
+        break;
+      }
       case 'chat': {
         const text = String(m.text || '').trim().slice(0, 200);
         if (!text) return;
@@ -398,6 +411,7 @@ class Room {
       rated: !!this.lastRated,
       finish: this.finish,
       chat: this.chat,
+      react: this.reaction,
       seats: this.seats.map((s, k) => ({
         name: s.name,
         bot: s.bot,
@@ -417,4 +431,5 @@ class Room {
   }
 }
 
-module.exports = { Room, TURN_MS, BETWEEN_MS, rankOf, suitOf };
+const REACTIONS_LIST = REACTIONS;
+module.exports = { REACTIONS: REACTIONS_LIST, Room, TURN_MS, BETWEEN_MS, rankOf, suitOf };
